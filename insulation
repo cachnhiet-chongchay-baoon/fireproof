@@ -1,0 +1,48 @@
+import cv2
+
+# Đường dẫn tới file hình ảnh
+image_path = "path_to_image.jpg"
+
+# Đọc hình ảnh vào
+image = cv2.imread(image_path)
+
+# Kiểm tra hình ảnh có tồn tại hay không
+if image is not None:
+    # Lấy chiều rộng và chiều cao của hình ảnh
+    height, width = image.shape[:2]
+
+    # Tạo một cửa sổ hiển thị hình ảnh
+    cv2.namedWindow("Sliding Image", cv2.WINDOW_NORMAL)
+
+    # Xác định tọa độ x ban đầu
+    x = 0
+
+    # Khởi tạo vòng lặp vẽ hình ảnh chạy từ trái qua phải
+    while True:
+        # Sao chép hình ảnh gốc để không làm thay đổi nó
+        sliding_image = image.copy()
+
+        # Cắt một phần của hình ảnh theo tọa độ x hiện tại
+        cropped_image = sliding_image[:, x:]
+
+        # Hiển thị hình ảnh trong cửa sổ
+        cv2.imshow("Sliding Image", cropped_image)
+
+        # Kiểm tra phím nhấn từ bàn phím
+        key = cv2.waitKey(25)
+
+        # Nếu phím 'q' được nhấn, thoát khỏi vòng lặp
+        if key == ord("q"):
+            break
+
+        # Tăng tọa độ x để đẩy hình ảnh sang phải
+        x += 1
+
+        # Nếu tọa độ x vượt quá chiều rộng của hình ảnh, đặt lại tọa độ x về 0
+        if x > width:
+            x = 0
+
+    # Đóng cửa sổ khi kết thúc vòng lặp
+    cv2.destroyAllWindows()
+else:
+    print("Không thể đọc hình ảnh!")
